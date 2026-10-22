@@ -54,7 +54,15 @@ def create_app(test_config=None):
     if len(app.config["SECRET_KEY"]) < 32:
         raise RuntimeError("SECRET_KEY cần ít nhất 32 ký tự ngẫu nhiên.")
     if os.environ.get("TRUST_PROXY") == "1":
-        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
+        direct = app.wsgi_app
+        proxied = ProxyFix(direct, x_for=1, x_proto=1)
+
+        def trusted_proxy(environ, start_response):
+            # Only local nginx/cloudflared may supply forwarded client and HTTPS headers.
+            handler = proxied if environ.get("REMOTE_ADDR") in ("127.0.0.1", "::1") else direct
+            return handler(environ, start_response)
+
+        app.wsgi_app = trusted_proxy
 
     raw_bank = (ROOT / "data" / "questions.json").read_bytes()
     bank = json.loads(raw_bank)

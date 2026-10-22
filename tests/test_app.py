@@ -1,4 +1,5 @@
 import json
+import os
 import sqlite3
 import tempfile
 import unittest
@@ -180,6 +181,19 @@ class QuizTest(unittest.TestCase):
         cookie = self.client.get_cookie("aicb_visitor")
         self.assertTrue(cookie.http_only)
         self.assertEqual(cookie.same_site, "Lax")
+
+    def test_tunnel_https_headers_are_trusted_only_from_loopback(self):
+        with patch.dict(os.environ, {"TRUST_PROXY": "1"}):
+            client = create_app(self.settings).test_client()
+        headers = {"Origin": "https://quiz.example", "X-Forwarded-Proto": "https",
+                   "X-Forwarded-For": "198.51.100.4"}
+        response = client.post("/api/exams", base_url="http://quiz.example",
+                               json={"nickname": "Tunnel QA"}, headers=headers)
+        self.assertEqual(response.status_code, 201)
+        forged = client.post("/api/exams", base_url="http://quiz.example",
+                             json={"nickname": "Fake proxy"}, headers=headers,
+                             environ_overrides={"REMOTE_ADDR": "198.51.100.9"})
+        self.assertEqual(forged.status_code, 403)
 
     def test_pagination_and_query_validation(self):
         for page in ("0", "-1", "a", "1.2", "9" * 50):

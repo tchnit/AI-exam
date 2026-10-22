@@ -75,7 +75,13 @@ Các biến môi trường tùy chọn:
 | --- | --- |
 | `QUIZ_DATABASE` | Đường dẫn tuyệt đối tới file SQLite, mặc định `instance/quiz.sqlite3`. Với systemd mẫu, giữ DB trong `instance/` hoặc sửa `ReadWritePaths` tương ứng. |
 | `SECRET_KEY` | Khóa ngẫu nhiên bền vững. Bỏ trống thì dùng `instance/secret.key` tạo một lần, mode 600. Không đưa khóa vào repo hoặc lệnh có thể lộ qua history. |
-| `TRUST_PROXY` | `1` khi đứng sau đúng một nginx tin cậy; local để trống. |
+| `TRUST_PROXY` | `1` khi đứng sau đúng một nginx/cloudflared trên cùng máy; chỉ request từ loopback được tin forwarded headers. |
+
+### Link công khai tạm thời bằng Cloudflare Tunnel
+
+Khi chạy `cloudflared` trên cùng máy, khởi động ứng dụng với `TRUST_PROXY=1`, rồi chạy `cloudflared tunnel --url http://127.0.0.1:8766 --no-autoupdate`. Dùng URL HTTPS `trycloudflare.com` được in ra. Ứng dụng chỉ tin forwarded headers từ loopback để HTTPS/Origin hoạt động qua tunnel; request trực tiếp từ mạng vẫn không được tự khai proxy headers.
+
+Giữ cả Gunicorn và cloudflared chạy ngầm bằng nohup nếu thoát SSH. Quick Tunnel là link tạm, đổi khi khởi tạo tunnel mới và không có đảm bảo uptime; dùng tunnel có tên/domain riêng khi cần địa chỉ ổn định. Link công khai cho phép người khác truy cập website và lịch sử/BXH theo thiết kế.
 | `COOKIE_SECURE` | `1` chỉ sau khi HTTPS hoạt động. |
 
 ## Cập nhật và sao lưu
