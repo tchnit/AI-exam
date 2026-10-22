@@ -12,7 +12,7 @@ python3 -m venv .venv
 sh run.sh
 ```
 
-`run.sh` lắng nghe **0.0.0.0:8000** để máy khác truy cập được. Trên máy đang chạy, mở **http://127.0.0.1:8000**; từ máy khác, mở **http://IP_MAY_CHU:8000** và cho phép cổng TCP 8000 trong firewall/security group nếu cần. `0.0.0.0` là địa chỉ bind, không phải địa chỉ để khách truy cập. Chạy trực tiếp bằng script thì để `TRUST_PROXY` tắt; không bật tin proxy headers khi cổng này nhận request trực tiếp từ Internet.
+`run.sh` lắng nghe **0.0.0.0:8766** để máy khác truy cập được. Trên máy đang chạy, mở **http://127.0.0.1:8766**; từ máy khác, mở **http://IP_MAY_CHU:8766** và cho phép cổng TCP 8766 trong firewall/security group nếu cần. `0.0.0.0` là địa chỉ bind, không phải địa chỉ để khách truy cập. Chạy trực tiếp bằng script thì để `TRUST_PROXY` tắt; không bật tin proxy headers khi cổng này nhận request trực tiếp từ Internet.
 
 Có thể dừng bằng Ctrl+C. Database và khóa cookie được tạo trong `instance/` khi khởi động; không xóa thư mục này khi cập nhật. Gunicorn tạo ứng dụng một lần với `--preload`, dùng chung khóa bền vững giữa các worker. Không dùng Flask development server khi public.
 
@@ -34,11 +34,11 @@ Cookie ký, HttpOnly, SameSite=Lax nhận lại **trình duyệt**, không xác 
 
 IP được HMAC bằng khóa server để hạn chế spam, không đưa vào API/BXH công khai. Giới hạn mặc định: 10 lượt mới/trình duyệt/giờ và 120 lượt mới/IP/giờ (tính cả bài bỏ). Người dùng có thể đổi IP/cookie để né; không coi đây là chống gian lận nghiêm ngặt. nginx có thể lưu IP thật trong access log tiêu chuẩn: quyền đọc/log retention do quản trị VPS quản lý.
 
-`TRUST_PROXY=1` chỉ bật khi request thực sự đi qua nginx tin cậy. Cấu hình mẫu ghi đè `X-Forwarded-For` bằng IP kết nối, không tin header tự khai. Service production dưới đây dùng nginx và giữ Gunicorn trên localhost; đây là cách chạy riêng với `run.sh` truy cập trực tiếp qua cổng 8000.
+`TRUST_PROXY=1` chỉ bật khi request thực sự đi qua nginx tin cậy. Cấu hình mẫu ghi đè `X-Forwarded-For` bằng IP kết nối, không tin header tự khai. Service production dưới đây dùng nginx và giữ Gunicorn trên localhost; đây là cách chạy riêng với `run.sh` truy cập trực tiếp qua cổng 8766.
 
 ## Deploy VPS Linux qua IP
 
-Ví dụ Ubuntu/Debian, giả định có quyền quản trị và cổng 8000 nội bộ chưa bị chiếm. Các lệnh dưới đây chạy **trên VPS**, sau khi đã copy nội dung `web/` vào `/opt/aicb-quiz/`. Chỉ copy ứng dụng; không copy PDF, HTML gốc có đáp án, `.venv/`, dữ liệu thử hoặc `instance/` của máy phát triển.
+Ví dụ Ubuntu/Debian, giả định có quyền quản trị và cổng 8766 nội bộ chưa bị chiếm. Các lệnh dưới đây chạy **trên VPS**, sau khi đã copy nội dung `web/` vào `/opt/aicb-quiz/`. Chỉ copy ứng dụng; không copy PDF, HTML gốc có đáp án, `.venv/`, dữ liệu thử hoặc `instance/` của máy phát triển.
 
 ```bash
 sudo apt-get update
@@ -54,7 +54,7 @@ sudo systemctl enable --now aicb-quiz
 sudo systemctl status aicb-quiz --no-pager
 ```
 
-Nếu user `aicb` đã tồn tại thì bỏ lệnh `useradd`. Nếu cổng 8000 đã có dịch vụ khác, chọn cổng trống và sửa **cả** service lẫn nginx; không dừng dịch vụ khác một cách tự động.
+Nếu user `aicb` đã tồn tại thì bỏ lệnh `useradd`. Nếu cổng 8766 đã có dịch vụ khác, chọn cổng trống và sửa **cả** service lẫn nginx; không dừng dịch vụ khác một cách tự động.
 
 Sửa `YOUR_VPS_IP` trong `deploy/nginx.conf` thành IP công khai thực tế, sau đó:
 

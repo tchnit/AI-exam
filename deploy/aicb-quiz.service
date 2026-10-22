@@ -9,7 +9,7 @@ Group=aicb
 WorkingDirectory=/opt/aicb-quiz
 Environment=TRUST_PROXY=1
 EnvironmentFile=-/etc/aicb-quiz.env
-ExecStart=/opt/aicb-quiz/.venv/bin/gunicorn --preload --no-control-socket --workers 2 --bind 127.0.0.1:8000 --access-logfile - --error-logfile - app:create_app()
+ExecStart=/opt/aicb-quiz/.venv/bin/gunicorn --preload --no-control-socket --workers 2 --bind 127.0.0.1:8766 --access-logfile - --error-logfile - app:create_app()
 Restart=on-failure
 RestartSec=3
 UMask=0077
