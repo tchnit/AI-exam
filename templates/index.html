@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Luyện thi AICB Data Annotation: đề ngẫu nhiên, chấm điểm, lịch sử và bảng xếp hạng công khai.">
+  <meta name="color-scheme" content="light">
+  <title>AICB — Phòng luyện thi</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Đến nội dung</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#home"><span class="brand-icon" aria-hidden="true">a.</span><span>AICB<span class="brand-sub">DATA ANNOTATION</span></span></a>
+      <nav aria-label="Điều hướng chính">
+        <a href="#home" data-nav="home">Luyện thi</a>
+        <a href="#leaderboard" data-nav="leaderboard">Bảng xếp hạng</a>
+        <a href="#history" data-nav="history">Lịch sử</a>
+      </nav>
+      <span class="header-note"><i aria-hidden="true"></i> Học từ mỗi lần thử</span>
+    </div>
+  </header>
+  <main id="main" class="container" tabindex="-1">
+    <div id="app" aria-busy="true"><div class="loading">Đang mở phòng luyện thi…</div></div>
+  </main>
+  <footer class="container footer"><span>AICB / Phòng luyện thi</span><span>Ôn tập có căn cứ. Tiến bộ qua từng lượt.</span></footer>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title">
+    <form method="dialog">
+      <span class="eyebrow">TRƯỚC KHI TIẾP TỤC</span>
+      <h2 id="confirm-title"></h2>
+      <p id="confirm-text"></p>
+      <div class="actions"><button class="button secondary" value="cancel">Quay lại</button><button class="button" value="ok" id="confirm-ok">Xác nhận</button></div>
+    </form>
+  </dialog>
+  <noscript><p class="container">Bạn cần bật JavaScript để làm bài và lưu câu trả lời.</p></noscript>
+</body>
+</html>
