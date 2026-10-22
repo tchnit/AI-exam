@@ -20,7 +20,7 @@ Có thể dừng bằng Ctrl+C. Database và khóa cookie được tạo trong `
 
 - Nhập biệt danh 2–30 ký tự, không đăng nhập.
 - Mỗi lượt mới lấy ngẫu nhiên 40 câu khác nhau từ 385 MCQ đã rà soát; 45 phút/lượt. Giữ thứ tự lựa chọn để lời giải không lệch đáp án.
-- Câu được chọn lưu lên máy chủ ngay; nháp chưa đồng bộ được giữ ở trình duyệt và tự thử lại khi có mạng. Tải lại trang có thể tiếp tục lượt cũ bằng cookie của cùng trình duyệt. Khi bắt đầu lượt mới, bài cũ chưa nộp được bỏ, không đưa lên BXH.
+- Chọn đáp án bằng click/chạm hoặc Enter/Space sẽ tự chuyển sang câu kế tiếp; câu cuối giữ nguyên để xem lại và nộp. Phím mũi tên chỉ đổi lựa chọn trong câu hiện tại. Câu được chọn lưu lên máy chủ ngay; nháp chưa đồng bộ được giữ ở trình duyệt và tự thử lại khi có mạng. Tải lại trang có thể tiếp tục lượt cũ bằng cookie của cùng trình duyệt. Khi bắt đầu lượt mới, bài cũ chưa nộp được bỏ, không đưa lên BXH.
 - Máy chủ giữ đáp án, thời hạn và chấm điểm; một lượt chỉ chốt một kết quả kể cả nộp lặp/đồng thời. Đúng 1, sai/trống 0; thang 10. Hết giờ chỉ chấm câu đã nhận trước hạn.
 - Bài hết giờ được chốt khi có request đọc bài/BXH/lịch sử hoặc nộp; không cần cron. Kết quả vẫn dùng deadline thật, không dùng thời điểm request đến muộn.
 - Kết quả công khai có câu đã chọn, đáp án, giải thích, nguồn và đúng/tổng theo chủ đề. Đây là đánh giá ôn tập: >=8 nắm khá vững; >=5 cần củng cố; dưới 5 cần ôn lại, không phải điểm chứng nhận.

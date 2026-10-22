@@ -129,12 +129,13 @@ function updateExamNavigation() {
     if (index === questionIndex) node.setAttribute('aria-current', 'step'); else node.removeAttribute('aria-current');
   });
 }
-function selectAnswer(option) {
+function selectAnswer(option, advance = true) {
   const q = exam.questions[questionIndex], ex = exam;
   ex.answers[q.id] = option; ex.pending.set(q.id, option); persistDraft(ex);
   renderQuestion(); updateExamNavigation(); updateSaveStatus(ex);
   document.querySelectorAll('.option')[option]?.focus({preventScroll: true});
   flush(ex).catch(error => toast(error.message));
+  if (advance && questionIndex < ex.questions.length - 1) goQuestion(questionIndex + 1);
 }
 function goQuestion(index) {
   questionIndex = index; renderQuestion(); updateExamNavigation();
@@ -148,7 +149,7 @@ function renderQuestion() {
     tabindex: selected === i || (selected == null && i === 0) ? 0 : -1,
     onclick: () => selectAnswer(i), onkeydown: event => {
       if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) {
-        event.preventDefault(); selectAnswer((i + (['ArrowDown', 'ArrowRight'].includes(event.key) ? 1 : 3)) % 4);
+        event.preventDefault(); selectAnswer((i + (['ArrowDown', 'ArrowRight'].includes(event.key) ? 1 : 3)) % 4, false);
       }
     },
   }, e('span', {class: 'letter', 'aria-hidden': 'true'}, 'ABCD'[i]), e('span', {}, text)));
